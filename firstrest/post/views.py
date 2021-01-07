@@ -88,10 +88,25 @@ from rest_framework.decorators import action
 # class PostViewSet(viewsets.ReadOnlyModelViewSet):
 #     queryset = Post.objects.all()
 #     serializer_class = PostSerializer
+# class PostViewSet(viewsets.ModelViewSet):
+#     queryset = Post.objects.all().order_by('id')
+#     serializer_class = PostSerializer
+#     #action(method=['post']) : 첫번째 인자 method를 post로 바꿀 때 
+#     @action(detail=True, renderer_classes=[renderers.StaticHTMLRenderer])
+#     def highlight(self, request, *args, **kwargs): #detail 페이지에서 [Extra Actions] 버튼에 동작 가능
+#         return HttpResponse("얍")
+
+
+#pagination
+"""
+drf에서 왜 필요? : 하나의 request만으로 처리하기 어려운 레코드들을 여러개의 request로 나누어 처리하기 위해
+drf에서 어떻게 구현? : PageNumber, LimitOffset, Cursor, Customized -> 대부분 PageNumber을 디폴트로 설정하고 추가적인 page설정이 필요한 부분만 customizing 시킴
+"""
+from rest_framework.pagination import PageNumberPagination
+class MyPagination(PageNumberPagination): #페이지네이션 커스터마이징 -> python 파일 따로 빼서 pagination.py 갖고 오는게 통상적이다.
+    page_size = 2
+
 class PostViewSet(viewsets.ModelViewSet):
-    queryset = Post.objects.all()
+    queryset = Post.objects.all().order_by('id')
     serializer_class = PostSerializer
-    #action(method=['post']) : 첫번째 인자 method를 post로 바꿀 때 
-    @action(detail=True, renderer_classes=[renderers.StaticHTMLRenderer])
-    def highlight(self, request, *args, **kwargs): #detail 페이지에서 [Extra Actions] 버튼에 동작 가능
-        return HttpResponse("얍")
+    pagination_class = MyPagination
