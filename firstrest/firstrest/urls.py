@@ -16,9 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 import post.urls,userpost.urls
+from rest_framework import urls
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('post/',include('post.urls')),
-    path('userpost/',include('userpost.urls'))
+    path('userpost/',include('userpost.urls')),
+    path('api-auth/',include('rest_framework.urls')) #헤드에 로그인로그아웃 가능한 버튼이 생긴다! 대신 BasicAuthentication이 아니고 TokenAuthentication으로 해야 된다
 
 ]

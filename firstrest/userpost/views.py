@@ -21,7 +21,7 @@ Search: Response 걸러받기 -> ex) response : 특정 modeld의 특정 column�
 """
 # Create your views here.
 class UserPostViewSet(viewsets.ModelViewSet):
-    authentication_classes=[BasicAuthentication,SessionAuthentication]
+    authentication_classes=[TokenAuthentication,SessionAuthentication]
     queryset = UserPost.objects.all()
     serializer_class = UserSerializer
     # filter_backends = [SearchFilter] #어떤걸 기반으로 검색할거야
@@ -58,4 +58,15 @@ RemoteUserAuthentication : user정보가 다른 서비스에서 관리될 때 �
 
 *httpie로 인증 POST 요청하기
 http --form --auth 1:1 POST http://127.0.0.1:8000/userpost/ title="얍" body="b1"
+
+*permission 설정
+1. settings.py에 'DEFAULT_PERMISSION_CLASSES':['rest_framework.permissions.IsAuthenticated','[permission_class]'] 추가
+2. view에 from rest_framework.permissions import [permission class] 하고 CBV에 permission_class = [permission class] 추가
+3. fbv라면 @permission_classes([permission class]) 데코레이터 추가
+
+*permission 종류
+AllowAny: default 설정. 인증된 요청이든 비인증요청이든 전부 허용
+IsAuthenticated : 인증된 요청에 대해서만 view 호출 허용
+IsAdminUser : User.is_staff == True 일 때만 허용 <- django.contrib.auth.models import User 모델에 있는 속성임~
+IsAuthenticatedOrReadOnly : 비인증요청은 읽기만 허용 (비인증요청은 안전한 http method만 허용 get,head,option 등)
 """
