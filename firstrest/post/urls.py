@@ -8,7 +8,7 @@ urlpatterns = [
     path('',include(router.urls)),
     # path('post/',views.PostList.as_view()),
     # path('post/<int:pk>/',views.PostDetail.as_view()),
-]
+] 
 """
 as_view({'[http_method]':'[처리할 함수 이름]'})이렇게 매핑할 수 있다~
 mypath=PostViewSet.as_view({
